@@ -37,7 +37,7 @@
                 <a href="#" 
                    hx-get="/pages/dashboard.html"
                    hx-target="#main-content"
-                   hx-swap="innerHTML fade swap:0.3s"
+                   hx-swap="innerHTML swap:0.3s"
                    class="nav-link sidebar-active block px-4 py-3 rounded-lg font-medium transition hover:bg-blue-700"
                    onclick="setActiveNav(this)">
                     <i class="fas fa-chart-line inline mr-3"></i>
@@ -46,7 +46,7 @@
                 <a href="#"
                    hx-get="/pages/list_nf.html"
                    hx-target="#main-content"
-                   hx-swap="innerHTML fade swap:0.3s"
+                   hx-swap="innerHTML swap:0.3s"
                    class="nav-link block px-4 py-3 rounded-lg font-medium text-gray-300 transition hover:bg-gray-700 hover:text-white"
                    onclick="setActiveNav(this)">
                     <i class="fas fa-file-invoice inline mr-3"></i>
@@ -195,29 +195,35 @@
         // Global chart references
         window.dashboardCharts = {};
 
-        // Load dashboard on page load - apenas uma vez
+        // Load dashboard on page load
         document.addEventListener('DOMContentLoaded', function() {
-            htmx.ajax('GET', '/pages/dashboard.html', '#main-content', {
-                onload: function() {
-                    // Trigger chart initialization after content is loaded
+            const mainContent = document.getElementById('main-content');
+            
+            // Load dashboard content
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', '/pages/dashboard.html', true);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    mainContent.innerHTML = xhr.responseText;
+                    // Initialize charts after content is loaded
                     setTimeout(function() {
                         if (window.initCharts) {
                             window.initCharts();
                         }
-                    }, 100);
+                    }, 150);
                 }
-            });
+            };
+            xhr.send();
         });
 
-        // Listen to HTMX swap events for dynamic content loading
-        document.addEventListener('htmx:afterSwap', function(evt) {
+        // Listen for HTMX navigation to re-initialize charts
+        document.addEventListener('htmx:afterSettle', function(evt) {
             if (evt.detail.target.id === 'main-content') {
-                // Update page title based on the loaded content
-                const navLink = document.querySelector('.nav-link.sidebar-active');
-                if (navLink) {
-                    const title = navLink.textContent.trim();
-                    document.getElementById('page-title').textContent = title;
-                }
+                setTimeout(function() {
+                    if (document.getElementById('delinquency-chart') && window.initCharts) {
+                        window.initCharts();
+                    }
+                }, 150);
             }
         });
     </script>
