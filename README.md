@@ -78,9 +78,43 @@ GET /finance/dashboard/summary
 **Quero** visualizar a evolução mensal da inadimplência e da receita  
 **Para** identificar tendências financeiras
 
+**Critérios de Aceite**
+- Exibir gráfico de evolução mensal da receita total
+- Exibir gráfico de evolução mensal da inadimplência
+- Permitir visualização dos últimos 12 meses
+- Permitir comparação com o ano anterior
+- Exibir valores em formato de moeda (R$)
+- Permitir filtro por período (mensal, trimestral, anual)
+- Gráficos devem ser responsivos e interativos
+
 **Endpoint**
 ```
 GET /finance/dashboard/evolution
+```
+
+**Request**
+```json
+{
+  "periodType": "month",
+  "startDate": "2023-01-01",
+  "endDate": "2023-12-31"
+}
+```
+
+**Response**
+```json
+{
+  "revenue": [
+    {"month": "2023-01", "value": 280000},
+    {"month": "2023-02", "value": 310000},
+    {"month": "2023-03", "value": 295000}
+  ],
+  "overdue": [
+    {"month": "2023-01", "value": 45000},
+    {"month": "2023-02", "value": 52000},
+    {"month": "2023-03", "value": 38000}
+  ]
+}
 ```
 
 ---
@@ -91,9 +125,58 @@ GET /finance/dashboard/evolution
 **Quero** visualizar a lista de notas fiscais  
 **Para** acompanhar cobranças e pagamentos
 
+**Critérios de Aceite**
+- Exibir lista paginada de notas fiscais (20 itens por página)
+- Exibir número da nota, cliente, valor, data de emissão e status
+- Exibir indicador visual de status (pago, pendente, vencido)
+- Permitir ordenação por data, valor e status
+- Exibir total de registros encontrados
+- Carregar lista inicial com notas do mês corrente
+- Exibir mensagem quando não houver notas fiscais
+
 **Endpoint**
 ```
 GET /nf/list
+```
+
+**Request**
+```json
+{
+  "page": 1,
+  "limit": 20,
+  "sortBy": "issueDate",
+  "sortOrder": "desc"
+}
+```
+
+**Response**
+```json
+{
+  "data": [
+    {
+      "id": "NF-2023-001",
+      "client": "Empresa XYZ Ltda",
+      "value": 15000,
+      "issueDate": "2023-08-15",
+      "dueDate": "2023-09-15",
+      "status": "pending"
+    },
+    {
+      "id": "NF-2023-002",
+      "client": "Consultoria ABC",
+      "value": 8500,
+      "issueDate": "2023-08-10",
+      "dueDate": "2023-09-10",
+      "status": "paid"
+    }
+  ],
+  "pagination": {
+    "total": 145,
+    "page": 1,
+    "limit": 20,
+    "totalPages": 8
+  }
+}
 ```
 
 ---
@@ -104,9 +187,76 @@ GET /nf/list
 **Quero** filtrar notas fiscais por período e status  
 **Para** localizar informações específicas com agilidade
 
+**Critérios de Aceite**
+- Permitir filtro por período (data inicial e final)
+- Permitir filtro por status (pago, pendente, vencido, a vencer)
+- Permitir filtro por cliente (busca por nome)
+- Permitir filtro por faixa de valor (mínimo e máximo)
+- Permitir combinação de múltiplos filtros simultaneamente
+- Exibir contador de resultados filtrados
+- Manter paginação ao aplicar filtros
+- Permitir limpar todos os filtros de uma vez
+- Atualizar lista instantaneamente ao aplicar filtros
+
 **Endpoint**
 ```
 GET /nf/list
+```
+
+**Request**
+```json
+{
+  "page": 1,
+  "limit": 20,
+  "filters": {
+    "startDate": "2023-08-01",
+    "endDate": "2023-08-31",
+    "status": ["pending", "overdue"],
+    "client": "XYZ",
+    "minValue": 5000,
+    "maxValue": 20000
+  },
+  "sortBy": "dueDate",
+  "sortOrder": "asc"
+}
+```
+
+**Response**
+```json
+{
+  "data": [
+    {
+      "id": "NF-2023-015",
+      "client": "Empresa XYZ Ltda",
+      "value": 15000,
+      "issueDate": "2023-08-15",
+      "dueDate": "2023-09-15",
+      "status": "pending"
+    },
+    {
+      "id": "NF-2023-008",
+      "client": "XYZ Comércio",
+      "value": 12500,
+      "issueDate": "2023-08-05",
+      "dueDate": "2023-08-20",
+      "status": "overdue"
+    }
+  ],
+  "pagination": {
+    "total": 12,
+    "page": 1,
+    "limit": 20,
+    "totalPages": 1
+  },
+  "appliedFilters": {
+    "startDate": "2023-08-01",
+    "endDate": "2023-08-31",
+    "status": ["pending", "overdue"],
+    "client": "XYZ",
+    "minValue": 5000,
+    "maxValue": 20000
+  }
+}
 ```
 
 ---
