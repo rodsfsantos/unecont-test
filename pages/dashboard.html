@@ -108,7 +108,7 @@
 </div>
 
 <script>
-    function renderDashboardCharts() {
+    function initDashboardCharts() {
         // Destroy existing charts if they exist
         if (window.dashboardCharts.delinquency) {
             window.dashboardCharts.delinquency.destroy();
@@ -281,19 +281,26 @@
         const delinquencyChart = document.getElementById('delinquency-chart');
         const revenueChart = document.getElementById('revenue-chart');
 
-        if (delinquencyChart) {
+        if (delinquencyChart && typeof ApexCharts !== 'undefined') {
             window.dashboardCharts.delinquency = new ApexCharts(delinquencyChart, delinquencyOptions);
             window.dashboardCharts.delinquency.render();
         }
 
-        if (revenueChart) {
+        if (revenueChart && typeof ApexCharts !== 'undefined') {
             window.dashboardCharts.revenue = new ApexCharts(revenueChart, revenueOptions);
             window.dashboardCharts.revenue.render();
         }
     }
 
-    // Make function globally accessible
-    window.renderDashboardCharts = renderDashboardCharts;
+    // Render charts immediately when this script is loaded
+    initDashboardCharts();
+
+    // Also listen for HTMX swaps
+    document.addEventListener('htmx:afterSettle', function(evt) {
+        if (evt.detail.target.id === 'main-content' && document.getElementById('delinquency-chart')) {
+            setTimeout(initDashboardCharts, 100);
+        }
+    }, { once: false });
 </script>
 </div>
 
