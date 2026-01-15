@@ -123,12 +123,17 @@
 </div>
 
 <script>
+    // Make initCharts globally accessible
+    window.initCharts = initCharts;
+
     // Initialize charts when dashboard loads
     document.addEventListener('htmx:afterSwap', function(evt) {
         if (evt.detail.target.id === 'main-content') {
             // Check if this is the dashboard by looking for chart containers
             if (document.getElementById('delinquency-chart')) {
-                initCharts();
+                setTimeout(function() {
+                    initCharts();
+                }, 100);
             }
         }
     });

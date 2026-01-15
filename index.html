@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         .sidebar-active {
             @apply bg-blue-700 text-white;
@@ -26,9 +27,7 @@
         <aside class="w-64 bg-gray-900 text-white shadow-lg flex flex-col">
             <div class="p-6 border-b border-gray-700">
                 <h1 class="text-2xl font-bold flex items-center gap-2">
-                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6-4a2 2 0 100-4 2 2 0 000 4z"></path>
-                    </svg>
+                    <i class="fas fa-coins text-yellow-400"></i>
                     UneCont
                 </h1>
                 <p class="text-sm text-gray-400 mt-1">Sistema Financeiro</p>
@@ -41,9 +40,7 @@
                    hx-swap="innerHTML fade swap:0.3s"
                    class="nav-link sidebar-active block px-4 py-3 rounded-lg font-medium transition hover:bg-blue-700"
                    onclick="setActiveNav(this)">
-                    <svg class="w-5 h-5 inline mr-3" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path>
-                    </svg>
+                    <i class="fas fa-chart-line inline mr-3"></i>
                     Dashboard
                 </a>
                 <a href="#"
@@ -52,18 +49,15 @@
                    hx-swap="innerHTML fade swap:0.3s"
                    class="nav-link block px-4 py-3 rounded-lg font-medium text-gray-300 transition hover:bg-gray-700 hover:text-white"
                    onclick="setActiveNav(this)">
-                    <svg class="w-5 h-5 inline mr-3" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
-                        <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 1 1 0 000-2 4 4 0 00-4 4v10a4 4 0 004 4h12a4 4 0 004-4V5a4 4 0 00-4-4 1 1 0 000 2 2 2 0 012 2v10a2 2 0 01-2 2H6a2 2 0 01-2-2V5z"></path>
-                    </svg>
+                    <i class="fas fa-file-invoice inline mr-3"></i>
                     Notas Fiscais
                 </a>
             </nav>
 
             <div class="p-4 border-t border-gray-700">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center font-bold">
-                        RO
+                    <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center font-bold text-white">
+                        <i class="fas fa-user"></i>
                     </div>
                     <div>
                         <p class="font-medium text-sm">Rodrigo</p>
@@ -84,9 +78,7 @@
                     </div>
                     <div class="flex items-center gap-4">
                         <button class="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0120 15.573V11a6 6 0 00-5.305-5.917V5a2 2 0 10-4 0v.083A6 6 0 004 11v4.573A2.032 2.032 0 002.405 16.595L1 18h5m6 0a3 3 0 11-6 0m6 0H9m4 0h4"></path>
-                            </svg>
+                            <i class="fas fa-bell text-lg"></i>
                         </button>
                     </div>
                 </div>
@@ -205,7 +197,16 @@
 
         // Load dashboard on page load - apenas uma vez
         document.addEventListener('DOMContentLoaded', function() {
-            htmx.ajax('GET', '/pages/dashboard.html', '#main-content');
+            htmx.ajax('GET', '/pages/dashboard.html', '#main-content', {
+                onload: function() {
+                    // Trigger chart initialization after content is loaded
+                    setTimeout(function() {
+                        if (window.initCharts) {
+                            window.initCharts();
+                        }
+                    }, 100);
+                }
+            });
         });
 
         // Listen to HTMX swap events for dynamic content loading
