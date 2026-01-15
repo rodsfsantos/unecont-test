@@ -96,212 +96,123 @@
         <!-- Delinquency Chart -->
         <div class="bg-white rounded-lg shadow p-6">
             <h3 class="text-lg font-semibold text-gray-900 mb-4">Evolução da Inadimplência</h3>
-            <div id="delinquency-chart" class="w-full"></div>
+            <svg viewBox="0 0 400 300" class="w-full">
+                <!-- Grid -->
+                <defs>
+                    <linearGradient id="delinquencyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style="stop-color:#dc2626;stop-opacity:0.3" />
+                        <stop offset="100%" style="stop-color:#dc2626;stop-opacity:0.05" />
+                    </linearGradient>
+                </defs>
+                
+                <!-- Grid lines -->
+                <line x1="50" y1="240" x2="380" y2="240" stroke="#e5e7eb" stroke-width="1"/>
+                <line x1="50" y1="180" x2="380" y2="180" stroke="#e5e7eb" stroke-width="1" stroke-dasharray="2"/>
+                <line x1="50" y1="120" x2="380" y2="120" stroke="#e5e7eb" stroke-width="1" stroke-dasharray="2"/>
+                <line x1="50" y1="60" x2="380" y2="60" stroke="#e5e7eb" stroke-width="1" stroke-dasharray="2"/>
+                
+                <!-- Axes -->
+                <line x1="50" y1="30" x2="50" y2="250" stroke="#374151" stroke-width="2"/>
+                <line x1="50" y1="250" x2="380" y2="250" stroke="#374151" stroke-width="2"/>
+                
+                <!-- Area chart path -->
+                <path d="M 80 200 L 160 140 L 240 80 L 380 30 L 380 250 L 240 250 L 160 250 L 80 250 Z" fill="url(#delinquencyGradient)"/>
+                
+                <!-- Line -->
+                <polyline points="80,200 160,140 240,80 380,30" fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                
+                <!-- Points -->
+                <circle cx="80" cy="200" r="5" fill="#dc2626" stroke="#fff" stroke-width="2"/>
+                <circle cx="160" cy="140" r="5" fill="#dc2626" stroke="#fff" stroke-width="2"/>
+                <circle cx="240" cy="80" r="5" fill="#dc2626" stroke="#fff" stroke-width="2"/>
+                
+                <!-- X axis labels -->
+                <text x="80" y="270" text-anchor="middle" font-size="12" fill="#6b7280">Out</text>
+                <text x="160" y="270" text-anchor="middle" font-size="12" fill="#6b7280">Nov</text>
+                <text x="240" y="270" text-anchor="middle" font-size="12" fill="#6b7280">Dez</text>
+                
+                <!-- Y axis labels -->
+                <text x="40" y="255" text-anchor="end" font-size="11" fill="#6b7280">R$ 0k</text>
+                <text x="40" y="125" text-anchor="end" font-size="11" fill="#6b7280">R$ 20k</text>
+                <text x="40" y="65" text-anchor="end" font-size="11" fill="#6b7280">R$ 35k</text>
+            </svg>
+            <div class="grid grid-cols-3 gap-4 text-center mt-4 pt-4 border-t">
+                <div>
+                    <p class="text-xs text-gray-600">Outubro</p>
+                    <p class="text-sm font-bold text-gray-900">R$ 15.200</p>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-600">Novembro</p>
+                    <p class="text-sm font-bold text-gray-900">R$ 22.500</p>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-600">Dezembro</p>
+                    <p class="text-sm font-bold text-red-600">R$ 35.800</p>
+                </div>
+            </div>
         </div>
 
         <!-- Revenue Chart -->
         <div class="bg-white rounded-lg shadow p-6">
             <h3 class="text-lg font-semibold text-gray-900 mb-4">Evolução da Receita Recebida</h3>
-            <div id="revenue-chart" class="w-full"></div>
+            <svg viewBox="0 0 400 300" class="w-full">
+                <!-- Grid -->
+                <defs>
+                    <linearGradient id="revenueGradient1" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style="stop-color:#60a5fa;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1" />
+                    </linearGradient>
+                    <linearGradient id="revenueGradient2" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style="stop-color:#93c5fd;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#60a5fa;stop-opacity:1" />
+                    </linearGradient>
+                    <linearGradient id="revenueGradient3" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#1d4ed8;stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+                
+                <!-- Grid lines -->
+                <line x1="50" y1="240" x2="380" y2="240" stroke="#e5e7eb" stroke-width="1"/>
+                <line x1="50" y1="180" x2="380" y2="180" stroke="#e5e7eb" stroke-width="1" stroke-dasharray="2"/>
+                <line x1="50" y1="120" x2="380" y2="120" stroke="#e5e7eb" stroke-width="1" stroke-dasharray="2"/>
+                <line x1="50" y1="60" x2="380" y2="60" stroke="#e5e7eb" stroke-width="1" stroke-dasharray="2"/>
+                
+                <!-- Axes -->
+                <line x1="50" y1="30" x2="50" y2="250" stroke="#374151" stroke-width="2"/>
+                <line x1="50" y1="250" x2="380" y2="250" stroke="#374151" stroke-width="2"/>
+                
+                <!-- Bars -->
+                <rect x="80" y="135" width="40" height="115" rx="4" fill="url(#revenueGradient1)"/>
+                <rect x="160" y="105" width="40" height="145" rx="4" fill="url(#revenueGradient2)"/>
+                <rect x="240" y="75" width="40" height="175" rx="4" fill="url(#revenueGradient3)"/>
+                
+                <!-- X axis labels -->
+                <text x="100" y="270" text-anchor="middle" font-size="12" fill="#6b7280">Out</text>
+                <text x="180" y="270" text-anchor="middle" font-size="12" fill="#6b7280">Nov</text>
+                <text x="260" y="270" text-anchor="middle" font-size="12" fill="#6b7280">Dez</text>
+                
+                <!-- Y axis labels -->
+                <text x="40" y="255" text-anchor="end" font-size="11" fill="#6b7280">R$ 0k</text>
+                <text x="40" y="125" text-anchor="end" font-size="11" fill="#6b7280">R$ 30k</text>
+                <text x="40" y="65" text-anchor="end" font-size="11" fill="#6b7280">R$ 60k</text>
+            </svg>
+            <div class="grid grid-cols-3 gap-4 text-center mt-4 pt-4 border-t">
+                <div>
+                    <p class="text-xs text-gray-600">Outubro</p>
+                    <p class="text-sm font-bold text-gray-900">R$ 42.000</p>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-600">Novembro</p>
+                    <p class="text-sm font-bold text-gray-900">R$ 51.500</p>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-600">Dezembro</p>
+                    <p class="text-sm font-bold text-blue-600">R$ 60.800</p>
+                </div>
+            </div>
         </div>
     </div>
-</div>
-
-<script>
-    function initDashboardCharts() {
-        // Destroy existing charts if they exist
-        if (window.dashboardCharts.delinquency) {
-            window.dashboardCharts.delinquency.destroy();
-        }
-        if (window.dashboardCharts.revenue) {
-            window.dashboardCharts.revenue.destroy();
-        }
-
-        const chartData = window.mockData.chartData;
-
-        // Delinquency Chart
-        const delinquencyOptions = {
-            series: [{
-                name: 'Inadimplência (R$)',
-                data: chartData.delinquency.values
-            }],
-            chart: {
-                type: 'area',
-                height: 300,
-                sparkline: {
-                    enabled: false
-                },
-                toolbar: {
-                    show: false
-                }
-            },
-            dataLabels: {
-                enabled: false
-            },
-            stroke: {
-                curve: 'smooth',
-                width: 2,
-                colors: ['#dc2626']
-            },
-            fill: {
-                type: 'gradient',
-                gradient: {
-                    shadeIntensity: 1,
-                    opacityFrom: 0.45,
-                    opacityTo: 0.05,
-                    stops: [20, 100, 100, 100],
-                    colorStops: [
-                        {
-                            offset: 0,
-                            color: '#dc2626',
-                            opacity: 0.5
-                        },
-                        {
-                            offset: 100,
-                            color: '#dc2626',
-                            opacity: 0.05
-                        }
-                    ]
-                }
-            },
-            xaxis: {
-                categories: chartData.delinquency.months,
-                labels: {
-                    style: {
-                        fontSize: '12px',
-                        fontFamily: 'inherit'
-                    }
-                }
-            },
-            yaxis: {
-                labels: {
-                    formatter: function(value) {
-                        return 'R$ ' + (value / 1000).toFixed(0) + 'k';
-                    },
-                    style: {
-                        fontSize: '12px',
-                        fontFamily: 'inherit'
-                    }
-                }
-            },
-            colors: ['#dc2626'],
-            markers: {
-                size: 5,
-                colors: '#dc2626',
-                strokeColors: '#fff',
-                strokeWidth: 2,
-                hover: {
-                    size: 7
-                }
-            },
-            grid: {
-                borderColor: '#e5e7eb',
-                strokeDashArray: 3
-            },
-            tooltip: {
-                theme: 'light',
-                x: {
-                    format: 'MMM'
-                },
-                y: {
-                    formatter: function(value) {
-                        return 'R$ ' + value.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
-                    }
-                }
-            }
-        };
-
-        // Revenue Chart
-        const revenueOptions = {
-            series: [{
-                name: 'Receita Recebida (R$)',
-                data: chartData.revenue.values
-            }],
-            chart: {
-                type: 'bar',
-                height: 300,
-                sparkline: {
-                    enabled: false
-                },
-                toolbar: {
-                    show: false
-                }
-            },
-            dataLabels: {
-                enabled: false
-            },
-            plotOptions: {
-                bar: {
-                    columnWidth: '60%',
-                    borderRadius: 4,
-                    dataLabels: {
-                        position: 'top'
-                    }
-                }
-            },
-            xaxis: {
-                categories: chartData.revenue.months,
-                labels: {
-                    style: {
-                        fontSize: '12px',
-                        fontFamily: 'inherit'
-                    }
-                }
-            },
-            yaxis: {
-                labels: {
-                    formatter: function(value) {
-                        return 'R$ ' + (value / 1000).toFixed(0) + 'k';
-                    },
-                    style: {
-                        fontSize: '12px',
-                        fontFamily: 'inherit'
-                    }
-                }
-            },
-            colors: ['#3b82f6'],
-            grid: {
-                borderColor: '#e5e7eb',
-                strokeDashArray: 3
-            },
-            tooltip: {
-                theme: 'light',
-                x: {
-                    format: 'MMM'
-                },
-                y: {
-                    formatter: function(value) {
-                        return 'R$ ' + value.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
-                    }
-                }
-            }
-        };
-
-        // Create charts
-        const delinquencyChart = document.getElementById('delinquency-chart');
-        const revenueChart = document.getElementById('revenue-chart');
-
-        if (delinquencyChart && typeof ApexCharts !== 'undefined') {
-            window.dashboardCharts.delinquency = new ApexCharts(delinquencyChart, delinquencyOptions);
-            window.dashboardCharts.delinquency.render();
-        }
-
-        if (revenueChart && typeof ApexCharts !== 'undefined') {
-            window.dashboardCharts.revenue = new ApexCharts(revenueChart, revenueOptions);
-            window.dashboardCharts.revenue.render();
-        }
-    }
-
-    // Render charts immediately when this script is loaded
-    initDashboardCharts();
-
-    // Also listen for HTMX swaps
-    document.addEventListener('htmx:afterSettle', function(evt) {
-        if (evt.detail.target.id === 'main-content' && document.getElementById('delinquency-chart')) {
-            setTimeout(initDashboardCharts, 100);
-        }
-    }, { once: false });
-</script>
 </div>
 
 

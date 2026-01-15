@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UneCont - Sistema de Gestão Financeira</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.45.1/apexcharts.min.js"></script>
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -193,10 +192,101 @@
         };
 
     <script>
-        // Global chart instances
-        window.dashboardCharts = {
-            delinquency: null,
-            revenue: null
+        function setActiveNav(element) {
+            document.querySelectorAll('.nav-link').forEach(el => {
+                el.classList.remove('sidebar-active');
+                el.classList.add('text-gray-300', 'hover:bg-gray-700');
+            });
+            element.classList.add('sidebar-active');
+            element.classList.remove('text-gray-300', 'hover:bg-gray-700');
+        }
+
+        // Mock data for the application
+        window.mockData = {
+            indicators: {
+                totalEmitted: 125500.00,
+                totalOverdue: 35800.50,
+                totalPending: 28900.75,
+                totalPaid: 60799.75
+            },
+            invoices: [
+                {
+                    id: 'NF001',
+                    payer: 'Empresa ABC Ltda',
+                    issueDate: '2025-12-15',
+                    chargeDate: '2025-12-20',
+                    paymentDate: '2025-12-28',
+                    amount: 5500.00,
+                    status: 'Pagamento realizado',
+                    invoiceDoc: 'NF-2025-001',
+                    boletoDoc: 'BOL-2025-001'
+                },
+                {
+                    id: 'NF002',
+                    payer: 'Tech Solutions Inc',
+                    issueDate: '2025-12-10',
+                    chargeDate: '2025-12-15',
+                    paymentDate: null,
+                    amount: 8900.50,
+                    status: 'Pagamento em atraso',
+                    invoiceDoc: 'NF-2025-002',
+                    boletoDoc: 'BOL-2025-002'
+                },
+                {
+                    id: 'NF003',
+                    payer: 'Comércio XYZ Ltda',
+                    issueDate: '2025-12-20',
+                    chargeDate: '2025-12-25',
+                    paymentDate: null,
+                    amount: 3200.00,
+                    status: 'Cobrança realizada',
+                    invoiceDoc: 'NF-2025-003',
+                    boletoDoc: 'BOL-2025-003'
+                },
+                {
+                    id: 'NF004',
+                    payer: 'Indústria Forte S.A',
+                    issueDate: '2025-12-05',
+                    chargeDate: '2025-12-10',
+                    paymentDate: '2025-12-12',
+                    amount: 12300.00,
+                    status: 'Pagamento realizado',
+                    invoiceDoc: 'NF-2025-004',
+                    boletoDoc: 'BOL-2025-004'
+                },
+                {
+                    id: 'NF005',
+                    payer: 'Consultoria Pro',
+                    issueDate: '2025-11-15',
+                    chargeDate: '2025-11-20',
+                    paymentDate: null,
+                    amount: 6700.25,
+                    status: 'Pagamento em atraso',
+                    invoiceDoc: 'NF-2025-005',
+                    boletoDoc: 'BOL-2025-005'
+                },
+                {
+                    id: 'NF006',
+                    payer: 'Logística Global',
+                    issueDate: '2025-12-25',
+                    chargeDate: '2025-12-30',
+                    paymentDate: null,
+                    amount: 9450.00,
+                    status: 'Emitida',
+                    invoiceDoc: 'NF-2025-006',
+                    boletoDoc: 'BOL-2025-006'
+                }
+            ],
+            chartData: {
+                delinquency: {
+                    months: ['Out', 'Nov', 'Dez'],
+                    values: [15200, 22500, 35800]
+                },
+                revenue: {
+                    months: ['Out', 'Nov', 'Dez'],
+                    values: [42000, 51500, 60800]
+                }
+            }
         };
 
         // Load dashboard on page load
