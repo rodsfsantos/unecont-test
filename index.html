@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UneCont - Sistema de Gestão Financeira</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+    <style>
+        .sidebar-active {
+            @apply bg-blue-700 text-white;
+        }
+        .fade-in {
+            animation: fadeIn 0.3s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-gray-900 text-white shadow-lg flex flex-col">
+            <div class="p-6 border-b border-gray-700">
+                <h1 class="text-2xl font-bold flex items-center gap-2">
+                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6-4a2 2 0 100-4 2 2 0 000 4z"></path>
+                    </svg>
+                    UneCont
+                </h1>
+                <p class="text-sm text-gray-400 mt-1">Sistema Financeiro</p>
+            </div>
+
+            <nav class="flex-1 px-4 py-6 space-y-2">
+                <a href="#" 
+                   hx-get="/pages/dashboard.html"
+                   hx-target="#main-content"
+                   hx-swap="innerHTML fade swap:0.3s"
+                   class="nav-link sidebar-active block px-4 py-3 rounded-lg font-medium transition hover:bg-blue-700"
+                   onclick="setActiveNav(this)">
+                    <svg class="w-5 h-5 inline mr-3" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path>
+                    </svg>
+                    Dashboard
+                </a>
+                <a href="#"
+                   hx-get="/pages/list_nf.html"
+                   hx-target="#main-content"
+                   hx-swap="innerHTML fade swap:0.3s"
+                   class="nav-link block px-4 py-3 rounded-lg font-medium text-gray-300 transition hover:bg-gray-700 hover:text-white"
+                   onclick="setActiveNav(this)">
+                    <svg class="w-5 h-5 inline mr-3" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
+                        <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 1 1 0 000-2 4 4 0 00-4 4v10a4 4 0 004 4h12a4 4 0 004-4V5a4 4 0 00-4-4 1 1 0 000 2 2 2 0 012 2v10a2 2 0 01-2 2H6a2 2 0 01-2-2V5z"></path>
+                    </svg>
+                    Notas Fiscais
+                </a>
+            </nav>
+
+            <div class="p-4 border-t border-gray-700">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center font-bold">
+                        RO
+                    </div>
+                    <div>
+                        <p class="font-medium text-sm">Rodrigo</p>
+                        <p class="text-gray-400 text-xs">Admin</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 flex flex-col overflow-hidden">
+            <!-- Header -->
+            <header class="bg-white shadow-sm border-b border-gray-200">
+                <div class="px-8 py-4 flex items-center justify-between">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-900" id="page-title">Dashboard</h2>
+                        <p class="text-gray-600 text-sm mt-1" id="page-subtitle">Visão geral do seu sistema financeiro</p>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <button class="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0120 15.573V11a6 6 0 00-5.305-5.917V5a2 2 0 10-4 0v.083A6 6 0 004 11v4.573A2.032 2.032 0 002.405 16.595L1 18h5m6 0a3 3 0 11-6 0m6 0H9m4 0h4"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <div id="main-content" class="flex-1 overflow-auto fade-in">
+                <!-- Dashboard padrão será carregado aqui -->
+                <div class="p-8">
+                    <p class="text-gray-500">Carregando...</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function setActiveNav(element) {
+            document.querySelectorAll('.nav-link').forEach(el => {
+                el.classList.remove('sidebar-active');
+                el.classList.add('text-gray-300', 'hover:bg-gray-700');
+            });
+            element.classList.add('sidebar-active');
+            element.classList.remove('text-gray-300', 'hover:bg-gray-700');
+        }
+
+        // Mock data for the application
+        window.mockData = {
+            indicators: {
+                totalEmitted: 125500.00,
+                totalOverdue: 35800.50,
+                totalPending: 28900.75,
+                totalPaid: 60799.75
+            },
+            invoices: [
+                {
+                    id: 'NF001',
+                    payer: 'Empresa ABC Ltda',
+                    issueDate: '2025-12-15',
+                    chargeDate: '2025-12-20',
+                    paymentDate: '2025-12-28',
+                    amount: 5500.00,
+                    status: 'Pagamento realizado',
+                    invoiceDoc: 'NF-2025-001',
+                    boletoDoc: 'BOL-2025-001'
+                },
+                {
+                    id: 'NF002',
+                    payer: 'Tech Solutions Inc',
+                    issueDate: '2025-12-10',
+                    chargeDate: '2025-12-15',
+                    paymentDate: null,
+                    amount: 8900.50,
+                    status: 'Pagamento em atraso',
+                    invoiceDoc: 'NF-2025-002',
+                    boletoDoc: 'BOL-2025-002'
+                },
+                {
+                    id: 'NF003',
+                    payer: 'Comércio XYZ Ltda',
+                    issueDate: '2025-12-20',
+                    chargeDate: '2025-12-25',
+                    paymentDate: null,
+                    amount: 3200.00,
+                    status: 'Cobrança realizada',
+                    invoiceDoc: 'NF-2025-003',
+                    boletoDoc: 'BOL-2025-003'
+                },
+                {
+                    id: 'NF004',
+                    payer: 'Indústria Forte S.A',
+                    issueDate: '2025-12-05',
+                    chargeDate: '2025-12-10',
+                    paymentDate: '2025-12-12',
+                    amount: 12300.00,
+                    status: 'Pagamento realizado',
+                    invoiceDoc: 'NF-2025-004',
+                    boletoDoc: 'BOL-2025-004'
+                },
+                {
+                    id: 'NF005',
+                    payer: 'Consultoria Pro',
+                    issueDate: '2025-11-15',
+                    chargeDate: '2025-11-20',
+                    paymentDate: null,
+                    amount: 6700.25,
+                    status: 'Pagamento em atraso',
+                    invoiceDoc: 'NF-2025-005',
+                    boletoDoc: 'BOL-2025-005'
+                },
+                {
+                    id: 'NF006',
+                    payer: 'Logística Global',
+                    issueDate: '2025-12-25',
+                    chargeDate: '2025-12-30',
+                    paymentDate: null,
+                    amount: 9450.00,
+                    status: 'Emitida',
+                    invoiceDoc: 'NF-2025-006',
+                    boletoDoc: 'BOL-2025-006'
+                }
+            ],
+            chartData: {
+                delinquency: {
+                    months: ['Out', 'Nov', 'Dez'],
+                    values: [15200, 22500, 35800]
+                },
+                revenue: {
+                    months: ['Out', 'Nov', 'Dez'],
+                    values: [42000, 51500, 60800]
+                }
+            }
+        };
+
+        // Load dashboard on page load
+        document.addEventListener('htmx:load', function() {
+            htmx.ajax('GET', '/pages/dashboard.html', '#main-content');
+        });
+
+        // Manual trigger on load
+        window.addEventListener('load', function() {
+            htmx.ajax('GET', '/pages/dashboard.html', '#main-content');
+        });
+    </script>
+</body>
+</html>

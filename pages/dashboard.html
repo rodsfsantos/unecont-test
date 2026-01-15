@@ -1,0 +1,221 @@
+<!-- Dashboard Page -->
+<div class="p-8 fade-in">
+    <!-- Filter Section -->
+    <div class="mb-8">
+        <div class="bg-white rounded-lg shadow p-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Filtros</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Período</label>
+                    <select id="filter-period" 
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            hx-post="/filter-dashboard"
+                            hx-target="#dashboard-content"
+                            hx-swap="innerHTML fade swap:0.3s">
+                        <option value="month">Mês Atual</option>
+                        <option value="quarter">Trimestre</option>
+                        <option value="year">Ano</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Mês</label>
+                    <select id="filter-month"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="12">Dezembro 2025</option>
+                        <option value="11">Novembro 2025</option>
+                        <option value="10">Outubro 2025</option>
+                    </select>
+                </div>
+                <div class="flex items-end">
+                    <button class="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium">
+                        Aplicar Filtros
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Indicators Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8" id="indicators-grid">
+        <!-- Total Emitido -->
+        <div class="bg-white rounded-lg shadow p-6 hover:shadow-lg transition">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-600 text-sm font-medium">Total Emitido</p>
+                    <p class="text-3xl font-bold text-gray-900 mt-2">R$ <span id="total-emitted">125.500,00</span></p>
+                </div>
+                <div class="bg-blue-100 p-4 rounded-lg">
+                    <svg class="w-8 h-8 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M8.433 7.418c.155-.103.346-.196.567-.267.221-.071.456-.121.697-.121.656 0 1.213.232 1.653.696.44.464.667 1.079.667 1.847 0 .66-.159 1.25-.476 1.77-.318.52-.742.927-1.271 1.22-.529.293-1.123.44-1.78.44a3.198 3.198 0 01-.503-.05A5.6 5.6 0 015 13V7c0-.621.504-1.125 1.125-1.125.504 0 .929.388.994.883.259.243.656.38 1.089.38.97 0 1.805-.31 2.25-.844m5.518.087c.295.094.585.227.851.392 1.39.908 2.309 2.515 2.309 4.32 0 2.934-2.384 5.317-5.317 5.317-2.934 0-5.317-2.384-5.317-5.317 0-1.844.869-3.451 2.259-4.359.266-.165.556-.298.851-.392V10a2 2 0 11-4 0V5a2 2 0 012-2h7a2 2 0 012 2v5c0 1.104-.896 2-2 2s-2-.896-2-2v-1.913z"></path>
+                    </svg>
+                </div>
+            </div>
+            <p class="text-xs text-gray-500 mt-2">↑ 12% do mês anterior</p>
+        </div>
+
+        <!-- Total Vencido -->
+        <div class="bg-white rounded-lg shadow p-6 hover:shadow-lg transition">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-600 text-sm font-medium">Inadimplência</p>
+                    <p class="text-3xl font-bold text-red-600 mt-2">R$ <span id="total-overdue">35.800,50</span></p>
+                </div>
+                <div class="bg-red-100 p-4 rounded-lg">
+                    <svg class="w-8 h-8 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+                    </svg>
+                </div>
+            </div>
+            <p class="text-xs text-red-600 mt-2">⚠ Requer atenção</p>
+        </div>
+
+        <!-- Total a Vencer -->
+        <div class="bg-white rounded-lg shadow p-6 hover:shadow-lg transition">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-600 text-sm font-medium">A Vencer</p>
+                    <p class="text-3xl font-bold text-yellow-600 mt-2">R$ <span id="total-pending">28.900,75</span></p>
+                </div>
+                <div class="bg-yellow-100 p-4 rounded-lg">
+                    <svg class="w-8 h-8 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00-.293.707l-.707.707a1 1 0 101.414 1.414L9 13.414V6z" clip-rule="evenodd"></path>
+                    </svg>
+                </div>
+            </div>
+            <p class="text-xs text-yellow-600 mt-2">⏱ Próximo vencimento em 5 dias</p>
+        </div>
+
+        <!-- Total Pago -->
+        <div class="bg-white rounded-lg shadow p-6 hover:shadow-lg transition">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-600 text-sm font-medium">Total Pago</p>
+                    <p class="text-3xl font-bold text-green-600 mt-2">R$ <span id="total-paid">60.799,75</span></p>
+                </div>
+                <div class="bg-green-100 p-4 rounded-lg">
+                    <svg class="w-8 h-8 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                    </svg>
+                </div>
+            </div>
+            <p class="text-xs text-green-600 mt-2">✓ 48,4% do total emitido</p>
+        </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8" id="dashboard-content">
+        <!-- Delinquency Chart -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Evolução da Inadimplência</h3>
+            <div style="position: relative; height: 300px;">
+                <canvas id="delinquency-chart"></canvas>
+            </div>
+        </div>
+
+        <!-- Revenue Chart -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Evolução da Receita Recebida</h3>
+            <div style="position: relative; height: 300px;">
+                <canvas id="revenue-chart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Initialize charts when dashboard loads
+    setTimeout(() => {
+        initCharts();
+    }, 100);
+
+    function initCharts() {
+        const chartData = window.mockData.chartData;
+
+        // Delinquency Chart
+        const delinquencyCtx = document.getElementById('delinquency-chart');
+        if (delinquencyCtx && delinquencyCtx.getContext) {
+            new Chart(delinquencyCtx, {
+                type: 'line',
+                data: {
+                    labels: chartData.delinquency.months,
+                    datasets: [{
+                        label: 'Inadimplência (R$)',
+                        data: chartData.delinquency.values,
+                        borderColor: '#dc2626',
+                        backgroundColor: 'rgba(220, 38, 38, 0.1)',
+                        borderWidth: 3,
+                        tension: 0.4,
+                        fill: true,
+                        pointRadius: 6,
+                        pointBackgroundColor: '#dc2626',
+                        pointHoverRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            labels: {
+                                font: { size: 12 },
+                                padding: 20
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return 'R$ ' + value.toLocaleString('pt-BR');
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Revenue Chart
+        const revenueCtx = document.getElementById('revenue-chart');
+        if (revenueCtx && revenueCtx.getContext) {
+            new Chart(revenueCtx, {
+                type: 'bar',
+                data: {
+                    labels: chartData.revenue.months,
+                    datasets: [{
+                        label: 'Receita Recebida (R$)',
+                        data: chartData.revenue.values,
+                        backgroundColor: ['#3b82f6', '#60a5fa', '#93c5fd'],
+                        borderRadius: 8,
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            labels: {
+                                font: { size: 12 },
+                                padding: 20
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return 'R$ ' + value.toLocaleString('pt-BR');
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    }
+</script>
