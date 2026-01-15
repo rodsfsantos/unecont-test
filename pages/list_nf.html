@@ -106,6 +106,8 @@
         const tableBody = document.getElementById('table-body');
         const rowCount = document.getElementById('row-count');
         
+        if (!tableBody) return;
+        
         tableBody.innerHTML = '';
         
         invoices.forEach(invoice => {
@@ -138,7 +140,9 @@
             tableBody.appendChild(row);
         });
         
-        rowCount.textContent = invoices.length;
+        if (rowCount) {
+            rowCount.textContent = invoices.length;
+        }
     }
 
     function formatDate(dateString) {
@@ -184,8 +188,6 @@
         renderTable(window.mockData.invoices);
     }
 
-    // Initial render
-    setTimeout(() => {
-        renderTable(window.mockData.invoices);
-    }, 100);
+    // Render table when this script is loaded
+    renderTable(window.mockData.invoices);
 </script>
