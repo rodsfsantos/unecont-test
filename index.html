@@ -6,6 +6,7 @@
     <title>UneCont - Sistema de Gestão Financeira</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.45.1/apexcharts.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         .sidebar-active {
@@ -191,8 +192,11 @@
             }
         };
 
-        // Global chart references
-        window.dashboardCharts = {};
+        // Global chart instances
+        window.dashboardCharts = {
+            delinquency: null,
+            revenue: null
+        };
 
         // Load dashboard on page load
         document.addEventListener('DOMContentLoaded', function() {
@@ -204,6 +208,12 @@
             xhr.onload = function() {
                 if (xhr.status === 200) {
                     mainContent.innerHTML = xhr.responseText;
+                    // Initialize charts after content is loaded
+                    setTimeout(function() {
+                        if (window.renderDashboardCharts) {
+                            window.renderDashboardCharts();
+                        }
+                    }, 100);
                 }
             };
             xhr.send();
@@ -212,7 +222,12 @@
         // Listen for HTMX navigation
         document.addEventListener('htmx:afterSettle', function(evt) {
             if (evt.detail.target.id === 'main-content') {
-                // Content loaded successfully
+                // Re-render charts on dashboard navigation
+                setTimeout(function() {
+                    if (window.renderDashboardCharts) {
+                        window.renderDashboardCharts();
+                    }
+                }, 100);
             }
         });
     </script>
