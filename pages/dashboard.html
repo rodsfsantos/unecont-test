@@ -124,17 +124,34 @@
 
 <script>
     // Initialize charts when dashboard loads
-    setTimeout(() => {
-        initCharts();
-    }, 100);
+    document.addEventListener('htmx:afterSwap', function(evt) {
+        if (evt.detail.target.id === 'main-content') {
+            // Check if this is the dashboard by looking for chart containers
+            if (document.getElementById('delinquency-chart')) {
+                initCharts();
+            }
+        }
+    });
+
+    function destroyCharts() {
+        if (window.dashboardCharts.delinquency) {
+            window.dashboardCharts.delinquency.destroy();
+        }
+        if (window.dashboardCharts.revenue) {
+            window.dashboardCharts.revenue.destroy();
+        }
+    }
 
     function initCharts() {
+        // Destroy existing charts before creating new ones
+        destroyCharts();
+
         const chartData = window.mockData.chartData;
 
         // Delinquency Chart
         const delinquencyCtx = document.getElementById('delinquency-chart');
         if (delinquencyCtx && delinquencyCtx.getContext) {
-            new Chart(delinquencyCtx, {
+            window.dashboardCharts.delinquency = new Chart(delinquencyCtx, {
                 type: 'line',
                 data: {
                     labels: chartData.delinquency.months,
@@ -180,7 +197,7 @@
         // Revenue Chart
         const revenueCtx = document.getElementById('revenue-chart');
         if (revenueCtx && revenueCtx.getContext) {
-            new Chart(revenueCtx, {
+            window.dashboardCharts.revenue = new Chart(revenueCtx, {
                 type: 'bar',
                 data: {
                     labels: chartData.revenue.months,

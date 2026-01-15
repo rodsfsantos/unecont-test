@@ -200,14 +200,24 @@
             }
         };
 
-        // Load dashboard on page load
-        document.addEventListener('htmx:load', function() {
+        // Global chart references
+        window.dashboardCharts = {};
+
+        // Load dashboard on page load - apenas uma vez
+        document.addEventListener('DOMContentLoaded', function() {
             htmx.ajax('GET', '/pages/dashboard.html', '#main-content');
         });
 
-        // Manual trigger on load
-        window.addEventListener('load', function() {
-            htmx.ajax('GET', '/pages/dashboard.html', '#main-content');
+        // Listen to HTMX swap events for dynamic content loading
+        document.addEventListener('htmx:afterSwap', function(evt) {
+            if (evt.detail.target.id === 'main-content') {
+                // Update page title based on the loaded content
+                const navLink = document.querySelector('.nav-link.sidebar-active');
+                if (navLink) {
+                    const title = navLink.textContent.trim();
+                    document.getElementById('page-title').textContent = title;
+                }
+            }
         });
     </script>
 </body>
