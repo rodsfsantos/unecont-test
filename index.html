@@ -84,7 +84,11 @@
             </header>
 
             <!-- Content Area -->
-            <div id="main-content" class="flex-1 overflow-auto fade-in">
+            <div id="main-content" 
+                 hx-get="/pages/dashboard.html"
+                 hx-trigger="load"
+                 hx-swap="innerHTML"
+                 class="flex-1 overflow-auto fade-in">
                 <!-- Dashboard padrão será carregado aqui -->
                 <div class="p-8">
                     <p class="text-gray-500">Carregando...</p>
@@ -288,28 +292,6 @@
                 }
             }
         };
-
-        // Load dashboard on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            const mainContent = document.getElementById('main-content');
-            
-            // Load dashboard content
-            const xhr = new XMLHttpRequest();
-            xhr.open('GET', '/pages/dashboard.html', true);
-            xhr.onload = function() {
-                if (xhr.status === 200) {
-                    mainContent.innerHTML = xhr.responseText;
-                }
-            };
-            xhr.send();
-        });
-
-        // Listen for HTMX navigation
-        document.addEventListener('htmx:afterSettle', function(evt) {
-            if (evt.detail.target.id === 'main-content') {
-                // Content loaded via HTMX
-            }
-        });
     </script>
     </script>
 </body>
