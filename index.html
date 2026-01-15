@@ -6,7 +6,6 @@
     <title>UneCont - Sistema de Gestão Financeira</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         .sidebar-active {
@@ -205,25 +204,15 @@
             xhr.onload = function() {
                 if (xhr.status === 200) {
                     mainContent.innerHTML = xhr.responseText;
-                    // Initialize charts after content is loaded
-                    setTimeout(function() {
-                        if (window.initCharts) {
-                            window.initCharts();
-                        }
-                    }, 150);
                 }
             };
             xhr.send();
         });
 
-        // Listen for HTMX navigation to re-initialize charts
+        // Listen for HTMX navigation
         document.addEventListener('htmx:afterSettle', function(evt) {
             if (evt.detail.target.id === 'main-content') {
-                setTimeout(function() {
-                    if (document.getElementById('delinquency-chart') && window.initCharts) {
-                        window.initCharts();
-                    }
-                }, 150);
+                // Content loaded successfully
             }
         });
     </script>

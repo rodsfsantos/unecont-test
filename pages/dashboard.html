@@ -92,141 +92,79 @@
     </div>
 
     <!-- Charts Section -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8" id="dashboard-content">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <!-- Delinquency Chart -->
         <div class="bg-white rounded-lg shadow p-6">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">Evolução da Inadimplência</h3>
-            <div style="position: relative; height: 300px;">
-                <canvas id="delinquency-chart"></canvas>
+            <h3 class="text-lg font-semibold text-gray-900 mb-6">Evolução da Inadimplência</h3>
+            <div class="space-y-4">
+                <!-- Out -->
+                <div>
+                    <div class="flex items-end justify-between mb-2 h-40">
+                        <div class="w-12 bg-gradient-to-t from-red-500 to-red-400 rounded-t-lg flex flex-col items-center justify-end pb-2" style="height: 45%;"></div>
+                        <div class="w-12 bg-gradient-to-t from-red-500 to-red-400 rounded-t-lg flex flex-col items-center justify-end pb-2" style="height: 65%;"></div>
+                        <div class="w-12 bg-gradient-to-t from-red-600 to-red-500 rounded-t-lg flex flex-col items-center justify-end pb-2" style="height: 100%;"></div>
+                    </div>
+                    <div class="flex justify-between text-xs text-gray-600 font-medium">
+                        <span>Out</span>
+                        <span>Nov</span>
+                        <span>Dez</span>
+                    </div>
+                </div>
+                <div class="border-t pt-4">
+                    <div class="grid grid-cols-3 gap-4 text-center">
+                        <div>
+                            <p class="text-sm text-gray-600">Outubro</p>
+                            <p class="text-lg font-bold text-gray-900">R$ 15.200</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-600">Novembro</p>
+                            <p class="text-lg font-bold text-gray-900">R$ 22.500</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-600">Dezembro</p>
+                            <p class="text-lg font-bold text-red-600">R$ 35.800</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
         <!-- Revenue Chart -->
         <div class="bg-white rounded-lg shadow p-6">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">Evolução da Receita Recebida</h3>
-            <div style="position: relative; height: 300px;">
-                <canvas id="revenue-chart"></canvas>
+            <h3 class="text-lg font-semibold text-gray-900 mb-6">Evolução da Receita Recebida</h3>
+            <div class="space-y-4">
+                <!-- Bars -->
+                <div>
+                    <div class="flex items-end justify-between gap-2 mb-2 h-40">
+                        <div class="flex-1 bg-gradient-to-t from-blue-500 to-blue-400 rounded-t-lg flex flex-col items-center justify-end pb-2" style="height: 70%;"></div>
+                        <div class="flex-1 bg-gradient-to-t from-blue-500 to-blue-400 rounded-t-lg flex flex-col items-center justify-end pb-2" style="height: 85%;"></div>
+                        <div class="flex-1 bg-gradient-to-t from-blue-600 to-blue-500 rounded-t-lg flex flex-col items-center justify-end pb-2" style="height: 100%;"></div>
+                    </div>
+                    <div class="flex justify-between text-xs text-gray-600 font-medium">
+                        <span>Out</span>
+                        <span>Nov</span>
+                        <span>Dez</span>
+                    </div>
+                </div>
+                <div class="border-t pt-4">
+                    <div class="grid grid-cols-3 gap-4 text-center">
+                        <div>
+                            <p class="text-sm text-gray-600">Outubro</p>
+                            <p class="text-lg font-bold text-gray-900">R$ 42.000</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-600">Novembro</p>
+                            <p class="text-lg font-bold text-gray-900">R$ 51.500</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-600">Dezembro</p>
+                            <p class="text-lg font-bold text-blue-600">R$ 60.800</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<script>
-    // Make initCharts globally accessible
-    window.initCharts = initCharts;
 
-    // Initialize charts when dashboard loads via HTMX
-    document.addEventListener('htmx:afterSettle', function(evt) {
-        if (evt.detail.target.id === 'main-content') {
-            // Check if this is the dashboard by looking for chart containers
-            if (document.getElementById('delinquency-chart')) {
-                setTimeout(function() {
-                    initCharts();
-                }, 150);
-            }
-        }
-    });
-
-    function destroyCharts() {
-        if (window.dashboardCharts.delinquency) {
-            window.dashboardCharts.delinquency.destroy();
-        }
-        if (window.dashboardCharts.revenue) {
-            window.dashboardCharts.revenue.destroy();
-        }
-    }
-
-    function initCharts() {
-        // Destroy existing charts before creating new ones
-        destroyCharts();
-
-        const chartData = window.mockData.chartData;
-
-        // Delinquency Chart
-        const delinquencyCtx = document.getElementById('delinquency-chart');
-        if (delinquencyCtx && delinquencyCtx.getContext) {
-            window.dashboardCharts.delinquency = new Chart(delinquencyCtx, {
-                type: 'line',
-                data: {
-                    labels: chartData.delinquency.months,
-                    datasets: [{
-                        label: 'Inadimplência (R$)',
-                        data: chartData.delinquency.values,
-                        borderColor: '#dc2626',
-                        backgroundColor: 'rgba(220, 38, 38, 0.1)',
-                        borderWidth: 3,
-                        tension: 0.4,
-                        fill: true,
-                        pointRadius: 6,
-                        pointBackgroundColor: '#dc2626',
-                        pointHoverRadius: 8
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: true,
-                            labels: {
-                                font: { size: 12 },
-                                padding: 20
-                            }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                callback: function(value) {
-                                    return 'R$ ' + value.toLocaleString('pt-BR');
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-        // Revenue Chart
-        const revenueCtx = document.getElementById('revenue-chart');
-        if (revenueCtx && revenueCtx.getContext) {
-            window.dashboardCharts.revenue = new Chart(revenueCtx, {
-                type: 'bar',
-                data: {
-                    labels: chartData.revenue.months,
-                    datasets: [{
-                        label: 'Receita Recebida (R$)',
-                        data: chartData.revenue.values,
-                        backgroundColor: ['#3b82f6', '#60a5fa', '#93c5fd'],
-                        borderRadius: 8,
-                        borderWidth: 0
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: true,
-                            labels: {
-                                font: { size: 12 },
-                                padding: 20
-                            }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                callback: function(value) {
-                                    return 'R$ ' + value.toLocaleString('pt-BR');
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-        }
-    }
-</script>
