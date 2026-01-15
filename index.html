@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UneCont - Sistema de Gestão Financeira</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.45.1/apexcharts.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.45.1/apexcharts.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         .sidebar-active {
             @apply bg-blue-700 text-white;
@@ -192,31 +192,43 @@
             }
         };
 
+    <script>
         // Global chart instances
         window.dashboardCharts = {
             delinquency: null,
             revenue: null
         };
 
-        // Load dashboard on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            const mainContent = document.getElementById('main-content');
-            
-            // Load dashboard content
-            const xhr = new XMLHttpRequest();
-            xhr.open('GET', '/pages/dashboard.html', true);
-            xhr.onload = function() {
-                if (xhr.status === 200) {
-                    mainContent.innerHTML = xhr.responseText;
-                    // Initialize charts after content is loaded
-                    setTimeout(function() {
-                        if (window.renderDashboardCharts) {
-                            window.renderDashboardCharts();
-                        }
-                    }, 100);
-                }
-            };
-            xhr.send();
+        // Wait for ApexCharts to be available
+        function waitForApexCharts(callback) {
+            if (typeof ApexCharts !== 'undefined') {
+                callback();
+            } else {
+                setTimeout(() => waitForApexCharts(callback), 100);
+            }
+        }
+
+        // Load dashboard on page load - wait for ApexCharts first
+        waitForApexCharts(function() {
+            document.addEventListener('DOMContentLoaded', function() {
+                const mainContent = document.getElementById('main-content');
+                
+                // Load dashboard content
+                const xhr = new XMLHttpRequest();
+                xhr.open('GET', '/pages/dashboard.html', true);
+                xhr.onload = function() {
+                    if (xhr.status === 200) {
+                        mainContent.innerHTML = xhr.responseText;
+                        // Initialize charts after content is loaded
+                        setTimeout(function() {
+                            if (window.renderDashboardCharts) {
+                                window.renderDashboardCharts();
+                            }
+                        }, 50);
+                    }
+                };
+                xhr.send();
+            });
         });
 
         // Listen for HTMX navigation
@@ -227,9 +239,10 @@
                     if (window.renderDashboardCharts) {
                         window.renderDashboardCharts();
                     }
-                }, 100);
+                }, 50);
             }
         });
+    </script>
     </script>
 </body>
 </html>
