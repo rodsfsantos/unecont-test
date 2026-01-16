@@ -25,7 +25,7 @@ O protótipo representa a tela de controle financeiro utilizada para acompanhame
 https://courageous-dieffenbachia-aa051d.netlify.app/
 
 ### Observações
-- Protótipo desenvolvido em **HTML/CSS** consumindo dados via APIs
+- Protótipo desenvolvido em **HTML/CSS**
 - O layout e UX refletem o comportamento esperado com dados dinâmicos
 - Os filtros e seleções não atualizam os dados em tempo real
 
