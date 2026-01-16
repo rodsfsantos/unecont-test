@@ -32,7 +32,7 @@ https://courageous-dieffenbachia-aa051d.netlify.app/
 
 ---
 
-## User Stories separadas por Front e Backend (API fake)
+## User Stories separadas por Front e Backend (API)
 
 ### US01-FE – Exibir indicadores no dashboard
 
@@ -43,10 +43,10 @@ https://courageous-dieffenbachia-aa051d.netlify.app/
 **Critérios de Aceite (tela)**
 - Renderizar quatro cards: Total Emitido, Inadimplência, A Vencer e Total Pago
 - Exibir textos auxiliares conforme layout (ex.: “↑ 12% do mês anterior”, “⚠ Requer atenção”)
-- Manter selects de Período e Mês visíveis e esteticamente funcionais; submissão deve disparar requisição para a API fake
-- Usar os valores retornados da API fake; fallback local apenas se a API estiver indisponível
+- Manter selects de Período e Mês visíveis e esteticamente funcionais; submissão deve disparar requisição para a API
+- Usar os valores retornados da API; fallback local apenas se a API estiver indisponível
 
-### US01-BE – API fake de indicadores do dashboard
+### US01-BE – API de indicadores do dashboard
 
 **Como** desenvolvedor front-end  
 **Quero** consumir uma API de resumo financeiro  
@@ -66,10 +66,10 @@ https://courageous-dieffenbachia-aa051d.netlify.app/
 
 **Critérios de Aceite (tela)**
 - Renderizar dois gráficos (linha/área para inadimplência, barras para receita) responsivos
-- Consumir dados da API fake e popular labels e valores; manter aparência atual (Out, Nov, Dez) como default
+- Consumir dados da API e popular labels e valores; manter aparência atual (Out, Nov, Dez) como default
 - Filtros de período podem reconsultar a API; se não houver dados adicionais, exibir default sem erro
 
-### US02-BE – API fake de evolução financeira
+### US02-BE – API de evolução financeira
 
 **Como** desenvolvedor front-end  
 **Quero** uma API que devolva séries de receita e inadimplência  
@@ -79,7 +79,7 @@ https://courageous-dieffenbachia-aa051d.netlify.app/
 - Endpoint GET `/api/dashboard/evolution` aceita `startDate`, `endDate` ou `periodType`
 - Retorna duas séries: `revenue[]` e `overdue[]` com `month` (YYYY-MM) e `value`
 - Valores default refletem o que está no protótipo (Out, Nov, Dez) para manter consistência visual
-- API fake pode ser servida por arquivo JSON estático; contrato preparado para expansão de 12 meses
+- API pode ser servida por arquivo JSON estático; contrato preparado para expansão de 12 meses
 
 ### US03-FE – Listar notas fiscais
 
@@ -91,9 +91,9 @@ https://courageous-dieffenbachia-aa051d.netlify.app/
 - Renderizar colunas: ID, Pagador, Data Emissão, Data Cobrança, Data Pagamento, Valor, Status, NF, Boleto
 - Aplicar badges de status com cores diferentes; botões de NF/Boleto devem acionar download ou simulação
 - Exibir contador de resultados e atualizar após filtros
-- Consumir a API fake para carregar a tabela; se indisponível, usar mock local como contingência
+- Consumir a API para carregar a tabela; se indisponível, usar mock local como contingência
 
-### US03-BE – API fake de listagem de notas fiscais
+### US03-BE – API de listagem de notas fiscais
 
 **Como** desenvolvedor front-end  
 **Quero** uma API de listagem de notas com filtros  
@@ -113,10 +113,10 @@ https://courageous-dieffenbachia-aa051d.netlify.app/
 
 **Critérios de Aceite (tela)**
 - Filtros disponíveis: mês de emissão, mês de cobrança, mês de pagamento e status
-- Ao aplicar filtros, chamar a API fake com os parâmetros selecionados e re-renderizar a tabela
+- Ao aplicar filtros, chamar a API com os parâmetros selecionados e re-renderizar a tabela
 - Botão “Limpar Filtros” remove parâmetros e recarrega a lista completa
 
-### US04-BE – API fake para filtros de notas
+### US04-BE – API para filtros de notas
 
 **Como** desenvolvedor front-end  
 **Quero** que a API de notas aceite filtros  
@@ -128,7 +128,7 @@ https://courageous-dieffenbachia-aa051d.netlify.app/
 - Retornar contagem total coerente com os registros filtrados
 - Manter consistência de status e datas com o que é exibido na tela
 
-### Observações sobre as APIs fake
+### Observações sobre as APIs
 - Podem ser servidas via JSON local, middleware mock ou service worker; o importante é manter o contrato estável
 - Dados iniciais devem refletir o que já aparece no protótipo, permitindo evolução incremental sem quebrar o front
 
