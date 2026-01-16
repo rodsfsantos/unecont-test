@@ -9,8 +9,8 @@ O objetivo do material é demonstrar capacidade de **pensamento de produto**, **
 
 ## Visão geral do conteúdo
 
-- Protótipo de tela do sistema financeiro (HTML/CSS)
-- User Stories com critérios de aceite e endpoints fake
+- Protótipo de tela do sistema financeiro (HTML/CSS estático com dados mock)
+- User Stories alinhadas ao comportamento do protótipo atual (front-end, sem backend)
 - Planejamento de sprint
 - Resolução do desafio de monetização do WhatsApp
 - Resolução do desafio de cancelamento de corridas na Uber
@@ -25,241 +25,68 @@ O protótipo representa a tela de controle financeiro utilizada para acompanhame
 https://courageous-dieffenbachia-aa051d.netlify.app/
 
 ### Observações
-- Protótipo desenvolvido em **HTML/CSS estático**
+- Protótipo desenvolvido em **HTML/CSS estático** com dados mock definidos em `window.mockData`
 - Objetivo exclusivamente visual (layout e UX)
 - Não há regras de negócio nem integração real com backend
+- Campos de filtro existem em tela, mas não recalculam indicadores nem gráficos; as tabelas são filtradas apenas no front-end
 
 ---
 
-## User Stories
+## User Stories (alinhadas ao protótipo atual)
 
-### US01 – Visualizar indicadores financeiros no dashboard
+### US01 – Visualizar indicadores no dashboard (mock)
 
 **Como** analista financeiro  
-**Quero** visualizar indicadores consolidados das notas fiscais  
-**Para** acompanhar a saúde financeira da empresa
+**Quero** visualizar os indicadores consolidados mostrados no dashboard  
+**Para** acompanhar a saúde financeira com os dados mock disponíveis
 
-**Critérios de Aceite**
-- Exibir valor total das notas emitidas
-- Exibir valor total das notas pagas
-- Exibir valor total das notas vencidas
-- Exibir valor total das notas a vencer
-- Permitir filtro por mês, trimestre e ano
+**Critérios de Aceite (conforme protótipo)**
+- Exibir quatro cards com valores fixos: Total Emitido, Inadimplência, A Vencer e Total Pago (dados mock de dezembro/2025)
+- Mostrar textos auxiliares (“↑ 12% do mês anterior”, “⚠ Requer atenção”, etc.) conforme layout estático
+- Campos de filtro “Período” e “Mês” estão presentes, mas a ação de aplicar não recalcula os indicadores (dados permanecem fixos)
+- Dados carregados localmente de `window.mockData.indicators`; não há integração com API ou backend
 
-**Endpoint**
-```
-GET /finance/dashboard/summary
-```
-
-**Request**
-```json
-{
-  "periodType": "month",
-  "year": 2023,
-  "month": 8
-}
-```
-
-**Response**
-```json
-{
-  "totalIssued": 350000,
-  "totalPaid": 220000,
-  "totalOverdue": 80000,
-  "totalToExpire": 50000
-}
-```
-
----
-
-### US02 – Visualizar gráficos de evolução financeira
+### US02 – Visualizar gráficos de evolução (mock)
 
 **Como** analista financeiro  
-**Quero** visualizar a evolução mensal da inadimplência e da receita  
-**Para** identificar tendências financeiras
+**Quero** ver os gráficos de inadimplência e receita apresentados no dashboard  
+**Para** ter uma visão visual dos valores mock disponíveis
 
-**Critérios de Aceite**
-- Exibir gráfico de evolução mensal da receita total
-- Exibir gráfico de evolução mensal da inadimplência
-- Permitir visualização dos últimos 12 meses
-- Permitir comparação com o ano anterior
-- Exibir valores em formato de moeda (R$)
-- Permitir filtro por período (mensal, trimestral, anual)
-- Gráficos devem ser responsivos e interativos
+**Critérios de Aceite (conforme protótipo)**
+- Exibir dois gráficos estáticos em SVG: linha/área para Inadimplência e barras para Receita
+- Período fixo de três meses (Out, Nov, Dez) com valores estáticos (R$ 15.200, R$ 22.500, R$ 35.800 na inadimplência; R$ 42.000, R$ 51.500, R$ 60.800 na receita)
+- Sem interação, comparação com ano anterior ou filtros funcionais; os dados são fixos no markup
+- Responsividade limitada à natureza do SVG/Tailwind; não há carregamento dinâmico de dados
 
-**Endpoint**
-```
-GET /finance/dashboard/evolution
-```
-
-**Request**
-```json
-{
-  "periodType": "month",
-  "startDate": "2023-01-01",
-  "endDate": "2023-12-31"
-}
-```
-
-**Response**
-```json
-{
-  "revenue": [
-    {"month": "2023-01", "value": 280000},
-    {"month": "2023-02", "value": 310000},
-    {"month": "2023-03", "value": 295000}
-  ],
-  "overdue": [
-    {"month": "2023-01", "value": 45000},
-    {"month": "2023-02", "value": 52000},
-    {"month": "2023-03", "value": 38000}
-  ]
-}
-```
-
----
-
-### US03 – Visualizar lista de notas fiscais
+### US03 – Visualizar lista de notas fiscais (mock)
 
 **Como** analista financeiro  
-**Quero** visualizar a lista de notas fiscais  
-**Para** acompanhar cobranças e pagamentos
+**Quero** visualizar a lista de notas fiscais exibida na tabela  
+**Para** consultar rapidamente os dados mock disponíveis
 
-**Critérios de Aceite**
-- Exibir lista paginada de notas fiscais (20 itens por página)
-- Exibir número da nota, cliente, valor, data de emissão e status
-- Exibir indicador visual de status (pago, pendente, vencido)
-- Permitir ordenação por data, valor e status
-- Exibir total de registros encontrados
-- Carregar lista inicial com notas do mês corrente
-- Exibir mensagem quando não houver notas fiscais
+**Critérios de Aceite (conforme protótipo)**
+- Tabela exibe as colunas ID, Pagador, Datas (emissão, cobrança, pagamento), Valor, Status, NF e Boleto
+- Dados provenientes de `window.mockData.invoices` (6 registros mock renderizados no front-end)
+- Badge de status com cores diferentes por status; botões de NF/Boleto disparam apenas um alerta de simulação de download
+- Sem paginação ou ordenação; o contador de notas mostra apenas a quantidade renderizada na tabela
 
-**Endpoint**
-```
-GET /nf/list
-```
-
-**Request**
-```json
-{
-  "page": 1,
-  "limit": 20,
-  "sortBy": "issueDate",
-  "sortOrder": "desc"
-}
-```
-
-**Response**
-```json
-{
-  "data": [
-    {
-      "id": "NF-2023-001",
-      "client": "Empresa XYZ Ltda",
-      "value": 15000,
-      "issueDate": "2023-08-15",
-      "dueDate": "2023-09-15",
-      "status": "pending"
-    },
-    {
-      "id": "NF-2023-002",
-      "client": "Consultoria ABC",
-      "value": 8500,
-      "issueDate": "2023-08-10",
-      "dueDate": "2023-09-10",
-      "status": "paid"
-    }
-  ],
-  "pagination": {
-    "total": 145,
-    "page": 1,
-    "limit": 20,
-    "totalPages": 8
-  }
-}
-```
-
----
-
-### US04 – Filtrar notas fiscais
+### US04 – Filtrar notas fiscais (mock)
 
 **Como** analista financeiro  
-**Quero** filtrar notas fiscais por período e status  
-**Para** localizar informações específicas com agilidade
+**Quero** filtrar as notas fiscais na tabela  
+**Para** encontrar rapidamente registros mock por mês e status
 
-**Critérios de Aceite**
-- Permitir filtro por período (data inicial e final)
-- Permitir filtro por status (pago, pendente, vencido, a vencer)
-- Permitir filtro por cliente (busca por nome)
-- Permitir filtro por faixa de valor (mínimo e máximo)
-- Permitir combinação de múltiplos filtros simultaneamente
-- Exibir contador de resultados filtrados
-- Manter paginação ao aplicar filtros
-- Permitir limpar todos os filtros de uma vez
-- Atualizar lista instantaneamente ao aplicar filtros
+**Critérios de Aceite (conforme protótipo)**
+- Filtros disponíveis: mês de emissão, mês de cobrança, mês de pagamento e status (selects); botão “Limpar Filtros” restaura a lista original
+- Filtragem ocorre apenas no front-end sobre os 6 registros mock; o contador de notas é atualizado conforme o resultado
+- Não há filtros por cliente, faixa de valor ou datas livres; não há paginação combinada com filtros
+- Nenhum endpoint é chamado; toda lógica ocorre no navegador com dados fixos
 
-**Endpoint**
-```
-GET /nf/list
-```
-
-**Request**
-```json
-{
-  "page": 1,
-  "limit": 20,
-  "filters": {
-    "startDate": "2023-08-01",
-    "endDate": "2023-08-31",
-    "status": ["pending", "overdue"],
-    "client": "XYZ",
-    "minValue": 5000,
-    "maxValue": 20000
-  },
-  "sortBy": "dueDate",
-  "sortOrder": "asc"
-}
-```
-
-**Response**
-```json
-{
-  "data": [
-    {
-      "id": "NF-2023-015",
-      "client": "Empresa XYZ Ltda",
-      "value": 15000,
-      "issueDate": "2023-08-15",
-      "dueDate": "2023-09-15",
-      "status": "pending"
-    },
-    {
-      "id": "NF-2023-008",
-      "client": "XYZ Comércio",
-      "value": 12500,
-      "issueDate": "2023-08-05",
-      "dueDate": "2023-08-20",
-      "status": "overdue"
-    }
-  ],
-  "pagination": {
-    "total": 12,
-    "page": 1,
-    "limit": 20,
-    "totalPages": 1
-  },
-  "appliedFilters": {
-    "startDate": "2023-08-01",
-    "endDate": "2023-08-31",
-    "status": ["pending", "overdue"],
-    "client": "XYZ",
-    "minValue": 5000,
-    "maxValue": 20000
-  }
-}
-```
-
----
+### Limitações conhecidas em relação à versão desejada
+- Indicadores e gráficos não são recalculados pelos filtros e não consultam backend
+- Lista de notas não possui paginação, ordenação, busca por cliente ou faixa de valor
+- Botões de download de NF/Boleto são apenas demonstrações (alerta)
+- Não há endpoints reais; o protótipo é 100% estático
 
 ## Planejamento da Sprint
 
