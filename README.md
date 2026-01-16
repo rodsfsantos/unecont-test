@@ -26,8 +26,8 @@ https://courageous-dieffenbachia-aa051d.netlify.app/
 
 ### Observações
 - Protótipo desenvolvido em **HTML/CSS**
-- O layout e UX refletem o comportamento esperado com dados dinâmicos
-- Os filtros e seleções não atualizam os dados em tempo real
+- O layout e UX refletem o comportamento esperado com dados mockados
+- Os filtros e seleções não atualizam os dados em tempo real (mockados)
 
 ---
 
