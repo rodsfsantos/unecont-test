@@ -9,8 +9,8 @@ O objetivo do material é demonstrar capacidade de **pensamento de produto**, **
 
 ## Visão geral do conteúdo
 
-- Protótipo de tela do sistema financeiro (HTML/CSS estático com dados mock)
-- User Stories alinhadas ao comportamento do protótipo atual (front-end, sem backend)
+- Protótipo de tela do sistema financeiro (HTML/CSS)
+- User Stories de frontend e backend para consumir APIs
 - Planejamento de sprint
 - Resolução do desafio de monetização do WhatsApp
 - Resolução do desafio de cancelamento de corridas na Uber
@@ -25,10 +25,10 @@ O protótipo representa a tela de controle financeiro utilizada para acompanhame
 https://courageous-dieffenbachia-aa051d.netlify.app/
 
 ### Observações
-- Protótipo desenvolvido em **HTML/CSS estático** com dados mock definidos em `window.mockData`
-- Objetivo exclusivamente visual (layout e UX)
-- Não há regras de negócio nem integração real com backend
-- Campos de filtro existem em tela, mas não recalculam indicadores nem gráficos; as tabelas são filtradas apenas no front-end
+- Protótipo desenvolvido em **HTML/CSS** consumindo dados reais via APIs
+- O layout e UX refletem o comportamento esperado com dados dinâmicos
+- Os filtros e seleções atualizam os dados em tempo real
+- A tabela é paginada e filtrada conforme os parâmetros enviados à API
 
 ---
 
@@ -44,7 +44,7 @@ https://courageous-dieffenbachia-aa051d.netlify.app/
 - Renderizar quatro cards: Total Emitido, Inadimplência, A Vencer e Total Pago
 - Exibir textos auxiliares conforme layout (ex.: “↑ 12% do mês anterior”, “⚠ Requer atenção”)
 - Manter selects de Período e Mês visíveis e esteticamente funcionais; submissão deve disparar requisição para a API
-- Usar os valores retornados da API; fallback local apenas se a API estiver indisponível
+- Usar os valores retornados da API para preencher os indicadores
 
 ### US01-BE – API de indicadores do dashboard
 
@@ -55,8 +55,8 @@ https://courageous-dieffenbachia-aa051d.netlify.app/
 **Critérios de Aceite (API)**
 - Disponibilizar endpoint GET `/api/dashboard/summary` que aceita `periodType` (month|quarter|year), `year` e `month` (quando aplicável)
 - Retornar objeto com `totalIssued`, `totalOverdue`, `totalPending`, `totalPaid`
-- Entregar payload coerente com o layout atual (ex.: valores de dez/2025), permitindo evoluir os dados depois
-- Endpoint pode ser servido via mock (ex.: JSON estático/HTMX server-sent ou middleware); contrato deve permanecer estável
+- Entregar payload consistente e atualizado conforme o período selecionado
+- Garantir contrato estável para evolução futura
 
 ### US02-FE – Exibir gráficos de evolução
 
@@ -66,8 +66,8 @@ https://courageous-dieffenbachia-aa051d.netlify.app/
 
 **Critérios de Aceite (tela)**
 - Renderizar dois gráficos (linha/área para inadimplência, barras para receita) responsivos
-- Consumir dados da API e popular labels e valores; manter aparência atual (Out, Nov, Dez) como default
-- Filtros de período podem reconsultar a API; se não houver dados adicionais, exibir default sem erro
+- Consumir dados da API e popular labels e valores dinamicamente
+- Filtros de período devem reconsultar a API e atualizar os gráficos em tempo real
 
 ### US02-BE – API de evolução financeira
 
@@ -78,8 +78,8 @@ https://courageous-dieffenbachia-aa051d.netlify.app/
 **Critérios de Aceite (API)**
 - Endpoint GET `/api/dashboard/evolution` aceita `startDate`, `endDate` ou `periodType`
 - Retorna duas séries: `revenue[]` e `overdue[]` com `month` (YYYY-MM) e `value`
-- Valores default refletem o que está no protótipo (Out, Nov, Dez) para manter consistência visual
-- API pode ser servida por arquivo JSON estático; contrato preparado para expansão de 12 meses
+- Dados podem ser retornados para qualquer período solicitado conforme disponibilidade
+- Contrato preparado para suportar históricos expandidos
 
 ### US03-FE – Listar notas fiscais
 
@@ -89,9 +89,9 @@ https://courageous-dieffenbachia-aa051d.netlify.app/
 
 **Critérios de Aceite (tela)**
 - Renderizar colunas: ID, Pagador, Data Emissão, Data Cobrança, Data Pagamento, Valor, Status, NF, Boleto
-- Aplicar badges de status com cores diferentes; botões de NF/Boleto devem acionar download ou simulação
+- Aplicar badges de status com cores diferentes; botões de NF/Boleto devem acionar download
 - Exibir contador de resultados e atualizar após filtros
-- Consumir a API para carregar a tabela; se indisponível, usar mock local como contingência
+- Consumir a API para carregar e atualizar a tabela conforme paginação e filtros
 
 ### US03-BE – API de listagem de notas fiscais
 
@@ -102,8 +102,8 @@ https://courageous-dieffenbachia-aa051d.netlify.app/
 **Critérios de Aceite (API)**
 - Endpoint GET `/api/nf/list` com parâmetros: `page`, `limit`, `issueMonth`, `chargeMonth`, `paymentMonth`, `status` (array), `sortBy`, `sortOrder`
 - Resposta contém `data[]` (id, client, value, issueDate, chargeDate, paymentDate, status, invoiceDoc, boletoDoc) e `pagination` (total, page, limit, totalPages)
-- Garantir que o contrato cubra os campos exibidos na tabela atual
-- API pode ser implementada como JSON estático ou service worker de mock, mantendo o contrato para futura troca por backend real
+- Garantir que o contrato cubra todos os campos exibidos na tabela
+- Paginação deve permitir navegação eficiente entre os registros
 
 ### US04-FE – Filtrar notas fiscais
 
@@ -129,8 +129,8 @@ https://courageous-dieffenbachia-aa051d.netlify.app/
 - Manter consistência de status e datas com o que é exibido na tela
 
 ### Observações sobre as APIs
-- Podem ser servidas via JSON local, middleware mock ou service worker; o importante é manter o contrato estável
-- Dados iniciais devem refletir o que já aparece no protótipo, permitindo evolução incremental sem quebrar o front
+- Os contratos devem permanecer estáveis e bem documentados para evolução incremental
+- O backend deve retornar dados coerentes com o que é esperado no frontend
 
 ## Planejamento da Sprint
 
