@@ -32,61 +32,105 @@ https://courageous-dieffenbachia-aa051d.netlify.app/
 
 ---
 
-## User Stories (alinhadas ao protótipo atual)
+## User Stories separadas por Front e Backend (API fake)
 
-### US01 – Visualizar indicadores no dashboard (mock)
-
-**Como** analista financeiro  
-**Quero** visualizar os indicadores consolidados mostrados no dashboard  
-**Para** acompanhar a saúde financeira com os dados mock disponíveis
-
-**Critérios de Aceite (conforme protótipo)**
-- Exibir quatro cards com valores fixos: Total Emitido, Inadimplência, A Vencer e Total Pago (dados mock de dezembro/2025)
-- Mostrar textos auxiliares (“↑ 12% do mês anterior”, “⚠ Requer atenção”, etc.) conforme layout estático
-- Campos de filtro “Período” e “Mês” estão presentes, mas a ação de aplicar não recalcula os indicadores (dados permanecem fixos)
-- Dados carregados localmente de `window.mockData.indicators`; não há integração com API ou backend
-
-### US02 – Visualizar gráficos de evolução (mock)
+### US01-FE – Exibir indicadores no dashboard
 
 **Como** analista financeiro  
-**Quero** ver os gráficos de inadimplência e receita apresentados no dashboard  
-**Para** ter uma visão visual dos valores mock disponíveis
+**Quero** visualizar no dashboard os quatro indicadores principais  
+**Para** acompanhar rapidamente a saúde financeira
 
-**Critérios de Aceite (conforme protótipo)**
-- Exibir dois gráficos estáticos em SVG: linha/área para Inadimplência e barras para Receita
-- Período fixo de três meses (Out, Nov, Dez) com valores estáticos (R$ 15.200, R$ 22.500, R$ 35.800 na inadimplência; R$ 42.000, R$ 51.500, R$ 60.800 na receita)
-- Sem interação, comparação com ano anterior ou filtros funcionais; os dados são fixos no markup
-- Responsividade limitada à natureza do SVG/Tailwind; não há carregamento dinâmico de dados
+**Critérios de Aceite (tela)**
+- Renderizar quatro cards: Total Emitido, Inadimplência, A Vencer e Total Pago
+- Exibir textos auxiliares conforme layout (ex.: “↑ 12% do mês anterior”, “⚠ Requer atenção”)
+- Manter selects de Período e Mês visíveis e esteticamente funcionais; submissão deve disparar requisição para a API fake
+- Usar os valores retornados da API fake; fallback local apenas se a API estiver indisponível
 
-### US03 – Visualizar lista de notas fiscais (mock)
+### US01-BE – API fake de indicadores do dashboard
+
+**Como** desenvolvedor front-end  
+**Quero** consumir uma API de resumo financeiro  
+**Para** preencher os cards do dashboard
+
+**Critérios de Aceite (API)**
+- Disponibilizar endpoint GET `/api/dashboard/summary` que aceita `periodType` (month|quarter|year), `year` e `month` (quando aplicável)
+- Retornar objeto com `totalIssued`, `totalOverdue`, `totalPending`, `totalPaid`
+- Entregar payload coerente com o layout atual (ex.: valores de dez/2025), permitindo evoluir os dados depois
+- Endpoint pode ser servido via mock (ex.: JSON estático/HTMX server-sent ou middleware); contrato deve permanecer estável
+
+### US02-FE – Exibir gráficos de evolução
 
 **Como** analista financeiro  
-**Quero** visualizar a lista de notas fiscais exibida na tabela  
-**Para** consultar rapidamente os dados mock disponíveis
+**Quero** ver os gráficos de inadimplência e receita no dashboard  
+**Para** acompanhar a evolução recente
 
-**Critérios de Aceite (conforme protótipo)**
-- Tabela exibe as colunas ID, Pagador, Datas (emissão, cobrança, pagamento), Valor, Status, NF e Boleto
-- Dados provenientes de `window.mockData.invoices` (6 registros mock renderizados no front-end)
-- Badge de status com cores diferentes por status; botões de NF/Boleto disparam apenas um alerta de simulação de download
-- Sem paginação ou ordenação; o contador de notas mostra apenas a quantidade renderizada na tabela
+**Critérios de Aceite (tela)**
+- Renderizar dois gráficos (linha/área para inadimplência, barras para receita) responsivos
+- Consumir dados da API fake e popular labels e valores; manter aparência atual (Out, Nov, Dez) como default
+- Filtros de período podem reconsultar a API; se não houver dados adicionais, exibir default sem erro
 
-### US04 – Filtrar notas fiscais (mock)
+### US02-BE – API fake de evolução financeira
+
+**Como** desenvolvedor front-end  
+**Quero** uma API que devolva séries de receita e inadimplência  
+**Para** alimentar os gráficos do dashboard
+
+**Critérios de Aceite (API)**
+- Endpoint GET `/api/dashboard/evolution` aceita `startDate`, `endDate` ou `periodType`
+- Retorna duas séries: `revenue[]` e `overdue[]` com `month` (YYYY-MM) e `value`
+- Valores default refletem o que está no protótipo (Out, Nov, Dez) para manter consistência visual
+- API fake pode ser servida por arquivo JSON estático; contrato preparado para expansão de 12 meses
+
+### US03-FE – Listar notas fiscais
 
 **Como** analista financeiro  
-**Quero** filtrar as notas fiscais na tabela  
-**Para** encontrar rapidamente registros mock por mês e status
+**Quero** ver a lista de notas fiscais na tabela  
+**Para** consultar rapidamente dados de cobrança
 
-**Critérios de Aceite (conforme protótipo)**
-- Filtros disponíveis: mês de emissão, mês de cobrança, mês de pagamento e status (selects); botão “Limpar Filtros” restaura a lista original
-- Filtragem ocorre apenas no front-end sobre os 6 registros mock; o contador de notas é atualizado conforme o resultado
-- Não há filtros por cliente, faixa de valor ou datas livres; não há paginação combinada com filtros
-- Nenhum endpoint é chamado; toda lógica ocorre no navegador com dados fixos
+**Critérios de Aceite (tela)**
+- Renderizar colunas: ID, Pagador, Data Emissão, Data Cobrança, Data Pagamento, Valor, Status, NF, Boleto
+- Aplicar badges de status com cores diferentes; botões de NF/Boleto devem acionar download ou simulação
+- Exibir contador de resultados e atualizar após filtros
+- Consumir a API fake para carregar a tabela; se indisponível, usar mock local como contingência
 
-### Limitações conhecidas em relação à versão desejada
-- Indicadores e gráficos não são recalculados pelos filtros e não consultam backend
-- Lista de notas não possui paginação, ordenação, busca por cliente ou faixa de valor
-- Botões de download de NF/Boleto são apenas demonstrações (alerta)
-- Não há endpoints reais; o protótipo é 100% estático
+### US03-BE – API fake de listagem de notas fiscais
+
+**Como** desenvolvedor front-end  
+**Quero** uma API de listagem de notas com filtros  
+**Para** preencher a tabela de notas fiscais
+
+**Critérios de Aceite (API)**
+- Endpoint GET `/api/nf/list` com parâmetros: `page`, `limit`, `issueMonth`, `chargeMonth`, `paymentMonth`, `status` (array), `sortBy`, `sortOrder`
+- Resposta contém `data[]` (id, client, value, issueDate, chargeDate, paymentDate, status, invoiceDoc, boletoDoc) e `pagination` (total, page, limit, totalPages)
+- Garantir que o contrato cubra os campos exibidos na tabela atual
+- API pode ser implementada como JSON estático ou service worker de mock, mantendo o contrato para futura troca por backend real
+
+### US04-FE – Filtrar notas fiscais
+
+**Como** analista financeiro  
+**Quero** filtrar notas por mês e status  
+**Para** encontrar rapidamente os registros relevantes
+
+**Critérios de Aceite (tela)**
+- Filtros disponíveis: mês de emissão, mês de cobrança, mês de pagamento e status
+- Ao aplicar filtros, chamar a API fake com os parâmetros selecionados e re-renderizar a tabela
+- Botão “Limpar Filtros” remove parâmetros e recarrega a lista completa
+
+### US04-BE – API fake para filtros de notas
+
+**Como** desenvolvedor front-end  
+**Quero** que a API de notas aceite filtros  
+**Para** devolver apenas os registros solicitados
+
+**Critérios de Aceite (API)**
+- Reutilizar o endpoint `/api/nf/list` para aplicar filtros recebidos
+- Garantir que filtros não enviados não afetem o resultado
+- Retornar contagem total coerente com os registros filtrados
+- Manter consistência de status e datas com o que é exibido na tela
+
+### Observações sobre as APIs fake
+- Podem ser servidas via JSON local, middleware mock ou service worker; o importante é manter o contrato estável
+- Dados iniciais devem refletir o que já aparece no protótipo, permitindo evolução incremental sem quebrar o front
 
 ## Planejamento da Sprint
 
